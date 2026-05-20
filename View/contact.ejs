@@ -1,0 +1,70 @@
+<%-include("./parcials/header.ejs") %>
+
+  <div class="container">
+    <img src="/uploads/logo-01.png" alt="Tech_InfoSys Banner" class="img-fluid mx-4 mt-4 mb-4">
+    <img src="/uploads/banner.jpg" alt="Tech_InfoSys Banner" class="img-fluid mx-4 mt-4 mb-4">
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light  sticky-top 0" >
+
+    <div class="container ">
+      <div class="d-flex gap-3 me-3">
+        <a href="#" class="text-dark social-icon"><i class="fab fa-facebook-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-twitter-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-instagram-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-youtube-square"></i></a>
+      </div>
+
+
+      <a class="navbar-brand" href="#!">Techno_infoSys</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+          class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0" >
+          <li class="nav-item"><a class="nav-link  h6 active" aria-current="page" href="/">Home</a></li>
+          <li class="nav-item" ><a class="nav-link h6" href="/about">About_us</a></li>
+          <li class="nav-item"><a class="nav-link h6" href="/contact">Contact_us</a></li>
+          <% if (user) { %>
+            <li class="nav-item"><a class="nav-link h6" href="/profile">
+                <i class="fa-solid fa-user"></i>
+                <%= user.name %>
+              </a></li>
+            <li class="nav-item"><a class="nav-link h6" href="/logout">Logout</a></li>
+            <% } else { %>
+              <li class="nav-item"><a class="nav-link h6" href="/login">Login</a></li>
+              <% } %>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container text-center align-items-center">
+    <h1>Contact Us</h1>
+
+
+
+  </div>
+  <div class="container-fluid mt-5 text-center">
+    <div class="col-12 col-lg-6">
+      <form action="/contact" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="message">Message:</label><br>
+        <textarea id="message" name="message" rows="4" cols="50" required></textarea><br><br>
+        </form>
+        <input type="submit" value="Submit">
+    </div>
+  </div>
+  <script>
+    
+  </script>
+  </body>
+
+  </html>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+    integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+    crossorigin="anonymous"></script>

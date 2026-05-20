@@ -1,0 +1,40 @@
+<%-include("./parcials/header.ejs") %>
+   
+    
+
+    <div class="card " style ="width: 20rem; margin: auto; margin-top: 50px; padding: 20px; box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);">
+    <h3 style="text-align: center; margin-bottom: 20px;"><i class="fas fa-user "></i> Login</h3>
+    <a href="/register" style="display: block; margin-bottom: 10px;">Don't have an account? Register here</a>
+<form action="/login" method="POST">
+  <div class="form-group">
+    <label for="exampleInputEmail1">Email address</label>
+    <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+  </div>
+  <div class="form-group">
+    <label for="exampleInputPassword1">Password</label>
+    <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password" required minlength="6">
+  </div>
+  <div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="exampleCheck1">
+    <label class="form-check-label" for="exampleCheck1">Check me out</label>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <a href="/" style="display: block; margin-bottom: 10px;">Go back to homepage</a>
+  <% if(typeof message!=="undefined" ){ %>
+      <p class ="alert"style="color: red">
+        <%=message %>
+      </p>
+      <% } %> 
+
+</form>
+</div>
+<script>
+     $(document).ready(function () {
+       setTimeout(function () {
+         $(".alert").fadeOut("slow");
+       }, 2000); // 2 seconds
+     });
+    
+   </script>
+

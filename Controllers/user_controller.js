@@ -1,0 +1,137 @@
+const express = require('express');
+const User = require('../Models/userModel'); 
+const Post= require('../Models/adminPost'); // Import the Post model
+const Ads = require('../Models/adsModel'); // Import the Ads model  
+// Import the User model
+const nodemailer = require('nodemailer')// Import the Post model  
+
+class UserController {
+  static login(req, res) {
+    //
+    res.render('login'); // Render the login view
+  }
+  
+
+  static async registerUser(req, res) {
+    
+    
+     const  {name, email, password}  = req.body;
+     const transporter = nodemailer.createTransport({
+           service: "gmail",
+           auth: {
+             user: "mvpatel2426@gmail.com",
+             pass: "agsd agir icuo szas"
+           }
+         });
+         const mailOptions = {
+           from: "mvpatel2426@gmail.com",
+           to: `${email}`,
+           subject: "New Registration",
+           text: `hey ${name} thanks for registering with us. We appreciate your interest and will get back to you as soon as possible.`
+         };
+         const mailOptions2 = {
+           from: "mvpatel2426@gmail.com",
+     
+           to: "delvadiyamv@gmail.com",
+     
+           subject: "New Registration",
+           text: `New user registered with Name: ${name}\nEmail: ${email}\n`
+         };
+     
+
+    try {
+        transporter.sendMail(mailOptions).then(info => {
+                console.log("Email sent: " + info.response);
+              }).catch(error => {
+                console.error("Error sending email: ", error);
+              });
+              transporter.sendMail(mailOptions2).then(info => {
+                console.log("Email sent: " + info.response);
+              }).catch(error => {
+                console.error("Error sending email: ", error);
+              });
+              
+
+      const existingUser = await User.findOne({ email: email }); // Check if user with the same email already exists
+      if (existingUser) {
+        res.render('register', { message: 'Email already exists' }); // Render registration with error if email already exists
+      } else {
+        const newUser = new User({ name, email, password }); // Create a new user instance
+        await newUser.save(); // Save the new user to the database
+        res.redirect('/login'); // Redirect to login page after successful registration
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+   
+};
+  
+  static async register(req, res) {
+    res.render('register'); // Render the registration view
+  }
+  //login user
+  static async loginUser(req, res) {
+    const email = req.body.email; // Get email and password from request body
+    const password = req.body.password;
+    console.log("action is login");
+    try {
+      const user = await User.findOne({ email: email, password: password }); // Find user by email and password
+      if (user) {
+        req.session.user = user;
+        req.session.userId = user._id; // Store user ID in session
+        req.session.is_admin = user.is_admin; // Store admin status in session
+        req.session.save(); // Store user in session
+        if (user.is_admin == 1) {
+          res.redirect('/dashboard');
+        } else {
+         // Store user data in local storage
+
+          res.redirect('/profile'); // Redirect to profile page with user data if not an admin
+        }
+      } else {
+        res.render('login', { message: 'Invalid email or password' }); // Render login with error if user not found
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error');
+    }
+  }
+ static async profile(req, res) {
+    try {
+      const userId = req.session.userId; // Get user ID from session
+      const user = await User.findById(userId); // Find user by ID
+      if (user) {
+        res.render('profile', { user: user }); // Render profile view with user data
+      } else {
+        res.status(404).send('User not found'); // Handle case where user is not found
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Server error'); // Handle server errors
+    }
+  } 
+  static async Aboutus(req, res) {
+    try {
+            // Fetch all posts from the database
+      let user=await User.findById(req.session.userId); // Fetch user data from the database
+       let ads = await Ads.find({}); // Fetch all ads from the database
+      res.render('about', { ads: ads, user: user }); // Render the about us view with ads data
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+  }
+  static async Contactus(req, res) {
+    try {
+      let user=await User.findById(req.session.userId); // Fetch user data from the database
+       let ads = await Ads.find({}); // 
+      res.render('contact', {user,ads}); // Render the contact us view
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ success: false, message: 'Internal Server Error' });
+    }
+    }
+  }
+
+module.exports = UserController;

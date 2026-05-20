@@ -1,0 +1,246 @@
+<%-include("./parcials/header.ejs") %>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-lg-8">
+                <!-- Post content-->
+                <article>
+                    <!-- Post header-->
+                    <header class="mb-4">
+                        <!-- Post title-->
+                        <h1 class="fw-bolder mb-1">
+                            <%= post.title %>
+                        </h1>
+                        <!-- Post meta content-->
+                        <div class="text-muted fst-italic mb-2"></div>
+                        <!-- Post categories-->
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">Web Design</a>
+                        <a class="badge bg-secondary text-decoration-none link-light" href="#!">Freebies</a>
+                        <b id="viewsCount">
+                            <% if(post.Views){ %>
+                                Views: <%= post.Views %>
+                                    <% } else { %>
+                                        Views: 0
+                                        <% } %>
+                        </b>
+                    </header>
+                    <!-- Preview image figure-->
+                    <figure class="mb-4">
+                        <% if(post.image) { %>
+                            <img class="img-fluid rounded mb-4 mb-lg-0" src="/uploads/<%= post.image %>" alt="..." />
+                            <% } else{ %>
+                                <img class="img-fluid rounded mb-4 mb-lg-0"
+                                    src="https://dummyimage.com/900x400/ced4da/6c757d.jpg" alt="..." />
+                                <% } %>
+                    </figure>
+                    <!-- Post content-->
+                    <section class="mb-5">
+                        <p class="fs-5 mb-4">
+                            <%= post.content %>
+                        </p>
+
+                    </section>
+                    <!-- views/posts.ejs -->
+
+
+
+
+
+                    </script>
+
+                    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+                    <script src="/js/like-dislike.js"></script>
+
+                </article>
+
+
+                <!-- Bootstrap JS -->
+
+                <!-- Auto Show Modal -->
+
+
+
+
+                <!-- Comments section-->
+                <section class="mb-5">
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <!-- Comment form-->
+                            <h2 class="h4 my-4">Leave a Comment</h2>
+                            <form class="mb-4"><textarea class="form-control" rows="3" name="comment" required
+                                    maxlength="100" placeholder="Join the discussion and leave a comment!"></textarea>
+                                <input type="hidden" class="form-control my-4" name="postId" required
+                                    value="<%= post._id %>">
+                                <input type="text" class="form-control my-4" name="name" value="" required
+                                    placeholder="Your Name" />
+                                <input type="email" class="form-control my-4" name="email" value="" required
+                                    placeholder="Your Email" />
+                                <button class="btn btn-primary" type="submit">Post Comment</button>
+                            </form>
+                            <p class="comments-message" style="color: aqua;"></p>
+                            <!-- Comment with nested comments-->
+
+                            <!-- Single comment-->
+                            <h2 class="h4">Comments</h2>
+                            <div class="comment-card">
+                                <% if(post.comments.length>=0) { %>
+                                    <% post.comments.forEach(comment=> { %>
+                                        <div class="d-flex my-4" id="">
+                                            <div class="flex-shrink-0"><img class="rounded-circle"
+                                                    src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." />
+                                            </div>
+                                            <div class="ms-3">
+                                                <div class="fw-bold">
+                                                    <%= comment.name %>
+                                                </div>
+                                                <%= comment.comment %>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <p>No comments yet.</p>
+                                                <% } %>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+            </div>
+        </div>
+
+        </section>
+        <!-- Modal -->
+        <div class="modal fade" id="adModal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <!-- Close Button -->
+                    <div class="modal-header border-0">
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <!-- Ad Content -->
+                    <%= newPost[0].title %>
+                        <div class="modal-body text-center">
+                            <% if(newPost[0].image) { %>
+
+                                <img class="img-fluid rounded mb-4 mb-lg-0" src="/uploads/<%= newPost[0].image %>" alt="..." />
+                        </div>
+                        <% } else { %>
+                            <img class="img-fluid rounded mb-4 mb-lg-0" src="https://dummyimage.com/600x400/000/fff"
+                                alt="..." />
+                </div>
+                <% } 
+
+                    %>
+                    <h5>Special Offer 🎉</h5>
+                    <p>Get 50% off on your first purchase!</p>
+                    <a href="#" class="btn btn-primary">Shop Now</a>
+            </div>
+
+        </div>
+    </div>
+    </div>
+
+
+    <!-- Side widgets-->
+    <script>
+        window.onload = function () {
+            setTimeout(function () {
+                var adModal = new bootstrap.Modal(document.getElementById('adModal'));
+                adModal.show();
+            }, 5000); // Show after 5 seconds   
+        };
+    </script>
+    <div class="col-lg-4">
+        <!-- Search widget-->
+        <div class="card mb-4">
+            <div class="card-header">Search</div>
+            <div class="card-body">
+                <div class="input-group">
+                    <input class="form-control" type="text" placeholder="Enter search term..."
+                        aria-label="Enter search term..." aria-describedby="button-search" />
+                    <button class="btn btn-primary" id="button-search" type="button">Go!</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    </div>
+    <script>
+        var socket = io();
+        var postId = "<%= post._id %>";
+        $('form').submit(function (e) {
+            e.preventDefault();
+            var formData = {}
+            $.each($(this).serializeArray(), function (i, field) {
+                formData[field.name] = field.value;
+            });
+
+
+            $.ajax({
+                type: "post",
+                url: "/comment",
+                data: formData,
+                success: function (res) {
+                    if (res.success) {
+                        //formData.commentId = res.postId;
+                        socket.emit('commentAdded', formData);
+                        $('.comments-message').text(res.message).fadeIn().delay(2000).fadeOut();
+                    } else {
+                        $('.comments-message').text(res.message).fadeIn().delay(2000).fadeOut();
+                    }
+                }
+            });
+
+        })
+
+
+
+
+        //var socket = io();
+        //var postId = "<%= post._id %>";
+        socket.emit('updateViews', postId);
+        socket.on('viewsUpdated', function (data) {
+            if (postId === data.postId) {
+                console.log('Views updated for post:', data.postId, 'New views count:', data.Views);
+                $('#viewsCount').text('Views: ' + data.Views);
+            }
+        });
+
+
+        //var socket = io();
+        var postId = "<%= post._id %>";
+        socket.on('commentAdded', function (data) {
+            console.log('New comment added to post:', data.postId);
+        });
+        //var socket = io();
+        //var postId = "<%= post._id %>";
+
+
+        //var socket = io();
+        socket.on('commentAdded', function (data) {
+            if (data.postId === postId) {
+                console.log(' the New comment added to post:', data.postId);
+                // Optionally, you can implement logic here to update the comments section in real-time
+                var html = '';
+                html += `
+                <div class="d-flex my-4">
+                    <div class="flex-shrink-0"><img class="rounded-circle"
+                            src="https://dummyimage.com/50x50/ced4da/6c757d.jpg" alt="..." /></div>
+
+                    <div class="ms-3">
+                        <div class="fw-bold">`+ data.name + `</div>
+                        `+ data.comment + `
+                    </div>
+                </div>
+                `;
+                $('.comment-card').prepend(html);
+            }
+        });
+    </script>
+
+
+    <%-include("./parcials/footer.ejs") %>

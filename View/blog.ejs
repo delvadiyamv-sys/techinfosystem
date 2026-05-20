@@ -1,0 +1,301 @@
+<%-include("./parcials/header.ejs") %>
+
+
+
+  <div class="container">
+    <img src="/uploads/logo-01.png" alt="Tech_InfoSys Banner" class="img-fluid mx-4 mt-4 mb-4">
+    <img src="/uploads/banner.jpg" alt="Tech_InfoSys Banner" class="img-fluid mx-4 mt-4 mb-4">
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light  sticky-top 100vh">
+
+    <div class="container ">
+      <div class="d-flex gap-3 me-3">
+        <a href="#" class="text-dark social-icon"><i class="fab fa-facebook-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-twitter-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-instagram-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-youtube-square"></i></a>
+      </div>
+
+
+      <a class="navbar-brand" href="#!">Techno_infoSys</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+          class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+          <li class="nav-item"><a class="nav-link  h6 active " aria-current="page" href="/">Home</a></li>
+          <li class="nav-item"><a class="nav-link h6" href="/about">About_us</a></li>
+          <li class="nav-item"><a class="nav-link h6" href="/contact">Contact_us</a></li>
+          <% if (user) { %>
+            <li class="nav-item"><a class="nav-link h6" href="/profile">
+                <i class="fa-solid fa-user"></i>
+                <%= user.name %>
+              </a></li>
+            <li class="nav-item"><a class="nav-link h6" href="/logout">Logout</a></li>
+            <% } else { %>
+              <li class="nav-item"><a class="nav-link h6" href="/login">Login</a></li>
+              <% } %>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+ recent posts
+
+  
+
+
+
+  <div class="container-fluid my-5 px-lg-4" id="runpost">
+    <div class="row mx-lg-4">
+
+      <!-- Posts Section -->
+      <div class="col-12 col-lg-8 px-lg-4 ">
+        <div class="row">
+          <% if(newPost.length> 0)
+            for(let i = (newPost.length - 1); i >= 0; i--) { %>
+
+            <!-- Post -->
+            <div class="col-12 col-md-6 mb-4 ">
+              <div class="card h-100 ">
+                <img src="<%= newPost[i].image %>" class="card-img-top img-fluid" alt="Post Image"
+                  style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                  <h5>
+                    <%= newPost[i].title.substring(0, 70) %>
+                  </h5>
+                  <p class="fw-bold">
+                    <small class="text-muted">author:</small>
+                   <%= newPost[i].author %>
+                   <small class="text-muted"> -<%= newPost[i].createdAt.toLocaleDateString() %></small>
+                  </p>
+
+                  <p>
+                    <%= newPost[i].content.substring(0, 90) %>...
+                      <a href="/post/<%= newPost[i]._id %>" class="btn btn-link">Read More</a>
+                  </p>
+                </div>
+              </div>
+            </div>
+
+
+            <!-- Ads after every 4 posts -->
+            <% if ((i + 1)===4) { %>
+              <div class="col-12 mb-4">
+                <small class="text-muted">Advertisement:</small>
+
+                <% if (newAd.length> 0) { %>
+                  <div class="bg-light text-center p-4" id="Ads0">
+                    <a href="<%= newAd[0].link %>" target="_blank">
+                      <img src="<%= newAd[0].image %>" alt="Ads Banner 1" class="img-fluid mt-2"
+                        style="max-height: 200px; width: 100%; object-fit: cover;">
+                    </a>
+
+
+                  </div>
+
+
+                  <% } %>
+
+              </div>
+
+              <% } %>
+
+                <% if ((i + 1)===8) { %>
+                  <div class="col-12 mb-4">
+                    <small class="text-muted">Advertisement:</small>
+                    <% if (newAd.length> 0) { %>
+                      <div class="bg-light text-center p-4" id="Ads1">
+                        <a href="<%= newAd[1].link %>" target="_blank">
+                          <img src="<%= newAd[1].image %>" alt="Ads Banner 1" class="img-fluid mt-2"
+                            style="max-height: 200px; width: 100%; object-fit: cover;">
+                        </a>
+
+
+                      </div>
+                      <% } %>
+                  </div>
+                  <% } %>
+
+
+                    <% } else { %>
+                      <div class="col-12">
+                        <p class="text-center">No posts available.</p>
+                      </div>
+                      <% } %>
+
+
+
+
+        </div>
+
+
+      </div>
+
+
+      <!-- Sidebar -->
+      <div class="col-12 col-md-12 col-lg-4  col-sm-12 align-items-center" id="sidebar">
+        <div class="bg-light p-3 mb-3 ">
+          Sidebar</div>
+
+        
+        </div>
+
+      </div>
+   
+
+
+
+    </div>
+
+  </div>
+
+
+  <!-- Footer Ad -->
+
+
+
+
+
+
+
+
+
+  <script>
+    var socket = io();
+    socket.on('newPost', function (data) {
+      console.log('New post received:', data);
+      var imageSrc = data.image ? data.image : 'https://dummyimage.com/600x400/000/fff';
+      var html = ``;
+      html += `
+            <div class="col-12 col-md-6 mb-4 ">
+              <div class="card h-100 " style="top: 100px;">
+                <img src="${imageSrc}" class="card-img-top img-fluid" alt="Post Image"
+                  style="height: 250px; object-fit: cover;">
+                <div class="card-body">
+                  <h5>
+                    ${data.title.substring(0, 70)}
+                  </h5>
+                  <p>
+                    ${data.content.substring(0, 90)}...
+                      <a href="/post/${data._id}" class="btn btn-link">Read More</a>
+                  </p>
+                </div>
+              </div>
+            </div>  
+        `
+      $('#runpost').prepend(html);
+    });
+
+  </script>
+  <script>
+    $(document).ready(function () {
+      setInterval(function () {
+        $("#Ads0").fadeIn(1000).delay(3000).fadeOut(1000);
+      }, 5000); // runs every 5 sec
+    });
+  </script>
+
+  <script>
+    $.ajax({
+      url: "https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=cced939be9024e9596e7f003b6222962",
+      method: "GET",
+      success: function (data) {
+        console.log(data);
+        var html = ""
+
+        for (var i = 0; i < data.articles.length; i++) {
+          html += `
+
+        <div  class="col-12 col-md-12 col-lg-* col-md-mx-8 col-sm-12 align-items-center" id="sidebar">
+          <div class="card mb-3" style="max-width: 540px; ">
+            <div class="row g-0">
+              <div class=" col-4 col-md-4 col-lg-4 d-flex align-items-center ">
+                <img src="${data.articles[i].urlToImage}" class=" img-thumbnail img-fluid rounded-start  d-block" alt="...">
+              </div>
+              <div class="col-md-8 col-lg-8 col-sm-8 col-8 ">
+                <div class="card-body">
+
+                  <p1 class="card-title" style="font-weight: bold;">${data.articles[i].title.substring(0, 80)}...</p1>
+                    <a href="${data.articles[i].url}" target="_blank" class="btn btn-link">Read More</a> 
+                    </p1>
+                  
+                  
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <hr></hr>
+
+  </div>
+
+  </div>
+  
+
+
+  <!-- Footer Ad -->
+
+
+
+        `;
+        }
+        $("#sidebar").html(html);
+      },
+      error: function (error) {
+        console.log(error);
+      },
+    });
+  </script>
+
+
+
+
+
+
+  <script>
+    var socket = io();
+    socket.on('newPost', function (data) {
+      console.log('New post received:', data);
+      var imageSrc = data.image ? data.image : 'https://dummyimage.com/600x400/000/fff';
+      var html = ``;
+      html += `
+            < div class="col-12 col-md-6 mb-4 " >
+              <div class="card h-100 " style="top: 100px;">
+                <img src="${imageSrc}" class="card-img-top img-fluid" alt="Post Image"
+                  style="height: 250px; object-fit: cover;">
+                  <div class="card-body">
+                    <h5>
+                      ${data.title.substring(0, 70)}
+                    </h5>
+                    <p>
+                      ${data.content.substring(0, 90)}...
+                      <a href="/post/${data._id}" class="btn btn-link">Read More</a>
+                    </p>
+                  </div>
+              </div>
+            </div >
+        `
+      $('#runpost').prepend(html);
+    });
+
+  </script>
+  <script>
+    $(document).ready(function () {
+      setInterval(function () {
+        $("#Ads0").fadeIn(1000).delay(3000).fadeOut(1000);
+      }, 5000); // runs every 5 sec
+      setInterval(function () {
+        $("#Ads1").fadeIn(1000).delay(3000).fadeOut(1000);
+      }, 5000); // 
+
+    });
+  </script>
+  
+
+  </script>
+
+  </script>
+  <%-include('./parcials/footer.ejs') %>

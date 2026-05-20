@@ -1,0 +1,60 @@
+<%-include("./parcials/header.ejs") %>
+
+  <div class="container">
+    <img src="/uploads/logo-01.png" alt="Tech_InfoSys Banner" class="img-fluid mx-4 mt-4 mb-4">
+    <img src="/uploads/banner.jpg" alt="Tech_InfoSys Banner" class="img-fluid mx-4 mt-4 mb-4">
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light  sticky-top 0" >
+
+    <div class="container ">
+      <div class="d-flex gap-3 me-3">
+        <a href="#" class="text-dark social-icon"><i class="fab fa-facebook-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-twitter-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-instagram-square"></i></a>
+        <a href="#" class="text-dark social-icon"><i class="fab fa-youtube-square"></i></a>
+      </div>
+
+
+      <a class="navbar-brand" href="#!">Techno_infoSys</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span
+          class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ms-auto mb-2 mb-lg-0" >
+          <li class="nav-item"><a class="nav-link  h6 active " aria-current="page" href="/">Home</a></li>
+          <li class="nav-item" ><a class="nav-link h6" href="/about">About_us</a></li>
+          <li class="nav-item"><a class="nav-link h6" href="/contact">Contact_us</a></li>
+          <% if (user) { %>
+            <li class="nav-item"><a class="nav-link h6" href="/profile">
+                <i class="fa-solid fa-user"></i>
+                <%= user.name %>
+              </a></li>
+            <li class="nav-item"><a class="nav-link h6" href="/logout">Logout</a></li>
+            <% } else { %>
+              <li class="nav-item"><a class="nav-link h6" href="/login">Login</a></li>
+              <% } %>
+
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container text-center align-items-center">
+    <h1>About Us</h1>
+    <hr>
+    <p class="mb-4">Welcome to Tech_InfoSys, your go-to destination for all things technology. We are passionate
+      about providing the latest news, insights, and reviews on a wide range of tech topics. Our mission is to
+      empower our readers with knowledge and help them navigate the ever-evolving world of technology.</p>
+    <p class="mb-4">At Tech_InfoSys, we cover a diverse range of topics including gadgets, software, artificial
+      intelligence, cybersecurity, and much more. Our team of experienced writers and tech enthusiasts are
+      dedicated to delivering high-quality content that is both informative and engaging.</p>
+    <p class="mb-4">Whether you're a tech novice looking to learn more or a seasoned professional seeking in-depth
+      analysis, Tech_InfoSys has something for everyone. We strive to create a community where technology
+      enthusiasts can come together to share ideas, ask questions, and stay up-to-date with the latest trends in
+      the tech industry.</p>
+    <p class="mb-4">Thank you for visiting Tech_InfoSys. We hope you find our content valuable and enjoyable. If you
+      have any questions or suggestions, please feel free to reach out to us. Happy reading!</p>
+  </div>
+
+  
